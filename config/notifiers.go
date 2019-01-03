@@ -159,6 +159,7 @@ type EmailConfig struct {
 	From         string              `yaml:"from,omitempty" json:"from,omitempty"`
 	Hello        string              `yaml:"hello,omitempty" json:"hello,omitempty"`
 	Smarthost    HostPort            `yaml:"smarthost,omitempty" json:"smarthost,omitempty"`
+	Auth         *bool               `yaml:"auth,omitempty" json:"auth,omitempty"`
 	AuthUsername string              `yaml:"auth_username,omitempty" json:"auth_username,omitempty"`
 	AuthPassword Secret              `yaml:"auth_password,omitempty" json:"auth_password,omitempty"`
 	AuthSecret   Secret              `yaml:"auth_secret,omitempty" json:"auth_secret,omitempty"`

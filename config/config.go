@@ -27,7 +27,7 @@ import (
 	"github.com/pkg/errors"
 	commoncfg "github.com/prometheus/common/config"
 	"github.com/prometheus/common/model"
-	"gopkg.in/yaml.v2"
+	yaml "gopkg.in/yaml.v2"
 )
 
 const secretToken = "<secret>"
@@ -280,6 +280,10 @@ func (c *Config) UnmarshalYAML(unmarshal func(interface{}) error) error {
 			if ec.Hello == "" {
 				ec.Hello = c.Global.SMTPHello
 			}
+			if ec.Auth == nil {
+				ec.Auth = new(bool)
+				*ec.Auth = c.Global.SMTPAuth
+			}
 			if ec.AuthUsername == "" {
 				ec.AuthUsername = c.Global.SMTPAuthUsername
 			}
@@ -457,6 +461,7 @@ func DefaultGlobalConfig() GlobalConfig {
 		HTTPConfig:     &commoncfg.HTTPClientConfig{},
 
 		SMTPHello:       "localhost",
+		SMTPAuth:        true,
 		SMTPRequireTLS:  true,
 		PagerdutyURL:    mustParseURL("https://events.pagerduty.com/v2/enqueue"),
 		HipchatAPIURL:   mustParseURL("https://api.hipchat.com/"),
@@ -545,6 +550,7 @@ type GlobalConfig struct {
 	SMTPFrom         string     `yaml:"smtp_from,omitempty" json:"smtp_from,omitempty"`
 	SMTPHello        string     `yaml:"smtp_hello,omitempty" json:"smtp_hello,omitempty"`
 	SMTPSmarthost    HostPort   `yaml:"smtp_smarthost,omitempty" json:"smtp_smarthost,omitempty"`
+	SMTPAuth         bool       `yaml:"smtp_auth,omitempty" json:"smtp_auth,omitempty"`
 	SMTPAuthUsername string     `yaml:"smtp_auth_username,omitempty" json:"smtp_auth_username,omitempty"`
 	SMTPAuthPassword Secret     `yaml:"smtp_auth_password,omitempty" json:"smtp_auth_password,omitempty"`
 	SMTPAuthSecret   Secret     `yaml:"smtp_auth_secret,omitempty" json:"smtp_auth_secret,omitempty"`

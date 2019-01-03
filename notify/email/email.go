@@ -174,14 +174,16 @@ func (n *Email) Notify(ctx context.Context, as ...*types.Alert) (bool, error) {
 		}
 	}
 
-	if ok, mech := c.Extension("AUTH"); ok {
-		auth, err := n.auth(mech)
-		if err != nil {
-			return true, errors.Wrap(err, "find auth mechanism")
-		}
-		if auth != nil {
-			if err := c.Auth(auth); err != nil {
-				return true, errors.Wrapf(err, "%T auth", auth)
+	if *n.conf.Auth {
+		if ok, mech := c.Extension("AUTH"); ok {
+			auth, err := n.auth(mech)
+			if err != nil {
+				return true, errors.Wrap(err, "find auth mechanism")
+			}
+			if auth != nil {
+				if err := c.Auth(auth); err != nil {
+					return true, errors.Wrapf(err, "%T auth", auth)
+				}
 			}
 		}
 	}
